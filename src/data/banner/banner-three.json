@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "image": "/assets/img/home/banner-1.jpg",
+    "title": "EQT Cushion ADV Shoes",
+    "subtitle": "Men's Original",
+    "price": "$99.00",
+    "link": "/shop-grid-standard"
+  },
+  {
+    "id": 2,
+    "image": "/assets/img/home/banner-2.jpg",
+    "title": "Nike Pro HyperCool",
+    "subtitle": "Women's Tank",
+    "price": "$79.00",
+    "link": "/shop-grid-standard"
+  }
+]

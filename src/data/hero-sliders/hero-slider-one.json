@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Sale Off 40%",
+    "subtitle": "Winter Offer 2022 Collection",
+    "image": "/assets/img/home/home--1.png",
+    "url": "/shop-grid-standard"
+  },
+  {
+    "id": 2,
+    "title": "Sale Off 40%",
+    "subtitle": "Summer Offer 2022 Collection",
+    "image": "/assets/img/home/home--3.png",
+    "url": "/shop-grid-standard"
+  }
+]
