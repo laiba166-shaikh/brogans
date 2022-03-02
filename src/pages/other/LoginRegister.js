@@ -1,16 +1,34 @@
 import PropTypes from "prop-types";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import MetaTags from "react-meta-tags";
-import { Link } from "react-router-dom";
+import { Link,useHistory } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { createUser, login } from "../../redux/actions/authActions";
+import { useToasts } from "react-toast-notifications";
+import { connect } from "react-redux";
 
-const LoginRegister = ({ location }) => {
+const LoginRegister = ({ location, registerUser, loginUser }) => {
   const { pathname } = location;
+  const history=useHistory()
+  const { addToast } = useToasts();
 
+  const [state, setState] = useState({
+    username: "",
+    email: "",
+    password: ""
+  })
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setState({
+      ...state,
+      [e.target.name]: value
+    });
+  }
   return (
     <Fragment>
       <MetaTags>
@@ -49,15 +67,22 @@ const LoginRegister = ({ location }) => {
                       <Tab.Pane eventKey="login">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form>
+                            <form onSubmit={(e) => {
+                              e.preventDefault()
+                              loginUser(state, addToast)
+                            }}>
                               <input
                                 type="text"
-                                name="user-name"
-                                placeholder="Username"
+                                name="email"
+                                autoComplete="off"
+                                onChange={handleInputChange}
+                                placeholder="Email / Username"
                               />
                               <input
                                 type="password"
-                                name="user-password"
+                                name="password"
+                                autoComplete="off"
+                                onChange={handleInputChange}
                                 placeholder="Password"
                               />
                               <div className="button-box">
@@ -79,19 +104,28 @@ const LoginRegister = ({ location }) => {
                       <Tab.Pane eventKey="register">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form>
+                            <form onSubmit={(e) => {
+                              e.preventDefault()
+                              registerUser(state, addToast)
+                            }}>
                               <input
                                 type="text"
-                                name="user-name"
+                                name="username"
+                                autoComplete="off"
+                                onChange={handleInputChange}
                                 placeholder="Username"
                               />
                               <input
                                 type="password"
-                                name="user-password"
+                                name="password"
+                                autoComplete="off"
+                                onChange={handleInputChange}
                                 placeholder="Password"
                               />
                               <input
-                                name="user-email"
+                                name="email"
+                                autoComplete="off"
+                                onChange={handleInputChange}
                                 placeholder="Email"
                                 type="email"
                               />
@@ -117,7 +151,33 @@ const LoginRegister = ({ location }) => {
 };
 
 LoginRegister.propTypes = {
-  location: PropTypes.object
+  location: PropTypes.object,
+  registerUser: PropTypes.func,
+  loginUser: PropTypes.func
 };
 
-export default LoginRegister;
+const mapDispatchToProps = dispatch => {
+  return {
+    registerUser: (user, addToast) => {
+      dispatch(createUser(
+        {
+          userName: user.username,
+          email: user.email,
+          password: user.password
+        },
+        addToast
+      ));
+    },
+    loginUser: (user, addToast) => {
+      dispatch(login(
+        {
+          email: user.email,
+          password: user.password
+        },
+        addToast
+      ));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(LoginRegister);
